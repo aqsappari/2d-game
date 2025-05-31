@@ -1,5 +1,4 @@
 const canvas = document.querySelector("canvas");
-const canvasContainer = document.querySelector(".canvasContainer");
 const c = canvas.getContext("2d");
 
 canvas.width = 600;
@@ -174,7 +173,6 @@ addEventListener("keyup", ({ key }) => {
 canvas.addEventListener("mousedown", (event) => {
   const x = event.clientX - canvas.getBoundingClientRect().left;
   const y = event.clientY - canvas.getBoundingClientRect().top;
-
   keys.click.x = x;
   keys.click.y = y;
   keys.click.isPressed = true;
@@ -193,4 +191,17 @@ canvas.addEventListener("touchstart", (event) => {
   keys.touch.x = x;
   keys.touch.y = y;
   keys.touch.isPressed = true;
+});
+
+canvas.addEventListener("touchmove", (event) => {
+  const touch = event.touches[0];
+  const x = touch.clientX - canvas.getBoundingClientRect().left;
+  const y = touch.clientY - canvas.getBoundingClientRect().top;
+
+  keys.touch.x = x;
+  keys.touch.y = y;
+});
+
+canvas.addEventListener("touchend", (event) => {
+  keys.touch.isPressed = false;
 });
