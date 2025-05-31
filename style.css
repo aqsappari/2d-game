@@ -1,0 +1,26 @@
+/* access font from the font folder */
+@font-face {
+  font-family: "Pixel Game";
+  src: url("./fonts/Pixel-Game.otf") format("truetype");
+}
+
+* {
+  font-family: "Pixel Game", sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #2b2b2b;
+}
+
+body {
+  background-color: #f0f0f0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100dvh;
+}
+
+canvas {
+  background-color: #87ceeb;
+  box-shadow: 0 0 10x rgba(0, 0, 0, 0.2);
+}
