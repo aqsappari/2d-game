@@ -131,21 +131,7 @@ function animate() {
     const angle = Math.atan2(dy, dx);
     player.velocity.x = Math.cos(angle) * 5; // Adjust speed as needed
 
-    if (
-      player.position.y + player.height < groundHeight &&
-      !platforms.some(
-        (platform) =>
-          player.position.x + player.width >= platform.position.x &&
-          player.position.x <= platform.position.x + platform.width &&
-          player.position.y + player.height <= platform.position.y &&
-          player.position.y + player.height + player.velocity.y >=
-            platform.position.y
-      )
-    ) {
-      return;
-    }
-
-    player.velocity.y = -5; // Jump only if on the ground
+    jump(); // Jump if the touch is pressed
   }
 
   /* Collision detection with platforms */
