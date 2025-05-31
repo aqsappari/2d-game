@@ -1,7 +1,7 @@
 /* access font from the font folder */
 @font-face {
   font-family: "Pixel Game";
-  src: url("./fonts/Pixel-Game.otf") format("truetype");
+  src: url("../fonts/Pixel-Game.otf") format("truetype");
 }
 
 * {
@@ -23,4 +23,16 @@ body {
 canvas {
   background-color: #87ceeb;
   box-shadow: 0 0 10x rgba(0, 0, 0, 0.2);
+  height: 100%;
+  margin: 10px 0;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* canvas for smaller screen */
+@media (max-width: 600px) {
+  canvas {
+    margin: 0;
+    border-radius: 0;
+  }
 }
