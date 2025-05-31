@@ -5,6 +5,14 @@ const c = canvas.getContext("2d");
 canvas.width = 600;
 canvas.height = innerHeight - 20;
 
+// adjust canvas width and height to fit the screen in smaller screens
+if (canvas.width > innerWidth) {
+  canvas.width = innerWidth; // Subtracting 20 for some padding
+}
+if (canvas.height > innerHeight) {
+  canvas.height = innerHeight; // Subtracting 20 for some padding
+}
+
 const gravity = 0.5;
 
 class Player {
@@ -76,10 +84,22 @@ function animate() {
     }
   }
 
-  if (keys.click.isPressed || keys.touch.isPressed) {
+  if (keys.click.isPressed) {
     // Move player towards the click position
     const dx = keys.click.x - (player.position.x + player.width / 2);
     const dy = keys.click.y - (player.position.y + player.height / 2);
+    const angle = Math.atan2(dy, dx);
+    player.velocity.x = Math.cos(angle) * 5; // Adjust speed as needed
+
+    if (player.position.y + player.height >= canvas.height) {
+      player.velocity.y = -15; // Jump only if on the ground
+    }
+  }
+
+  if (keys.touch.isPressed) {
+    // Move player towards the touch position
+    const dx = keys.touch.x - (player.position.x + player.width / 2);
+    const dy = keys.touch.y - (player.position.y + player.height / 2);
     const angle = Math.atan2(dy, dx);
     player.velocity.x = Math.cos(angle) * 5; // Adjust speed as needed
 
