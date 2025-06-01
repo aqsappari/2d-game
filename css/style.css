@@ -27,6 +27,16 @@ canvas {
   margin: 10px 0;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+score {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  font-size: 128px;
 }
 
 /* canvas for smaller screen */
