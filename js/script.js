@@ -43,9 +43,9 @@ class Player {
     // Apply gravity effect
     this.velocity.y += gravity;
 
-    // if player fall off the screen, reset the game
+    // if player fall off the screen, end the game
     if (this.position.y - scrollOffset - 50 > canvas.height) {
-      resetGame();
+      endGame();
       return;
     }
   }
@@ -114,12 +114,13 @@ class Platform {
       }
 
       const elapsedTime = (Date.now() - this.startTime) / 1000; // Time in seconds
+      const time = 6;
 
-      if (elapsedTime < 1) {
+      if (elapsedTime < time) {
         this.opacity = 1; // Full opacity for first second
-      } else if (elapsedTime < 2) {
+      } else if (elapsedTime < time + 1) {
         this.opacity = 0.66; // 66% opacity for second second
-      } else if (elapsedTime < 3) {
+      } else if (elapsedTime < time + 2) {
         this.opacity = 0.33; // 33% opacity for third second
       } else {
         this.opacity = 0; // Vanish
@@ -129,10 +130,11 @@ class Platform {
   }
 }
 
-function init() {
+function startGame() {
   platforms = []; // Ensure platforms array is empty before adding initial ones
   scrollOffset = 0; // Reset scroll offset
   currentPlatform = 0; // Reset current platform ID
+  score.style.display = "block";
   score.textContent = "0"; // Reset score display
   platformIdCounter = 0; // Reset platform ID counter
   canJump = true; // Reset jump state
@@ -268,26 +270,19 @@ function animate() {
       if (spawnBoost) {
         // Calculate a non-overlapping X position for the boost platform
         let boostX;
+        const boostWidth = 100;
 
-        // Try to place it to the right or left of the main platform
-        if (
-          newMainPlatform.position.x + newMainPlatform.width + 20 + boostWidth <
-          canvas.width
-        ) {
-          // Enough space to the right
-          boostX = newMainPlatform.position.x + newMainPlatform.width + 20;
-        } else if (newMainPlatform.position.x - 20 - boostWidth > 0) {
-          // Enough space to the left
-          boostX = newMainPlatform.position.x - 20 - boostWidth;
-        } else {
-          // If no ideal space, just place it randomly but ensure it's within bounds
+        do {
           boostX = Math.random() * (canvas.width - boostWidth);
-        }
+        } while (
+          boostX + boostWidth >= newMainPlatform.position.x - 20 &&
+          boostX <= newMainPlatform.position.x + newMainPlatform.width + 20
+        );
 
         const newBoostPlatform = new Platform(
           boostX,
           newPlatformY, // Same Y as the main platform
-          50,
+          boostWidth,
           20,
           "boost",
           "purple"
@@ -306,14 +301,14 @@ function animate() {
   });
 }
 
-// Call init initially to set up the game for the first time
-init();
-animate();
-
 /* Helper functions */
-function resetGame() {
-  alert("Game Over! Resetting...");
-  init();
+function endGame() {
+  score.style.display = "none";
+  let finalScore = parseInt(score.textContent);
+  alert(`Final Score: ${finalScore}
+    
+    resetting...`);
+  startGame();
 }
 
 function jump(n = 1, forcedJump = false) {
@@ -322,8 +317,8 @@ function jump(n = 1, forcedJump = false) {
   // Check if player is on ANY platform (including the ground)
   const isOnPlatform = platforms.some(
     (platform) =>
-      player.position.x + player.width >= platform.position.x && // Check if player is on the left side of the platform
-      player.position.x <= platform.position.x + platform.width && // Check if player is on the right side of the platform
+      player.position.x + player.width >= platform.position.x - 10 && // Check if player is on the left side of the platform
+      player.position.x <= platform.position.x + platform.width + 10 && // Check if player is on the right side of the platform
       player.position.y + player.height <= platform.position.y && // Check if player is above the platform
       player.position.y + player.height + player.velocity.y >=
         platform.position.y // Check if player is falling onto the platform
@@ -346,21 +341,10 @@ function getNextPlatformConfig(idCounter) {
     type = "normal";
     color = "brown";
   }
-  // Platforms 50 to 99 (IDs 50-99)
-  else if (idCounter < 100) {
-    if (Math.random() < 0.1) {
-      // 1 in 10 chance for moving
-      type = "moving";
-      color = "blue";
-    } else {
-      type = "normal";
-      color = "brown";
-    }
-  }
-  // Platforms 100 onwards (IDs 100+)
+  // Platforms 50 onwards (IDs 50+)
   else {
-    // Increase moving platform chance by 1% for every 50 platforms after ID 100
-    let movingChance = 0.1 + Math.floor((idCounter - 100) / 50) * 0.01;
+    // Increase moving platform chance by 1% for every 50 platforms after ID 50
+    let movingChance = 0.1 + Math.floor((idCounter - 50) / 50) * 0.01;
     movingChance = Math.min(movingChance, 0.5); // Cap at 50% chance
     if (Math.random() < movingChance) {
       type = "moving";
@@ -373,10 +357,13 @@ function getNextPlatformConfig(idCounter) {
 
   // Boost platform spawning logic (only for normal platforms from ID 100 onwards)
   // This flag indicates if a boost platform *should* accompany the main platform.
-  if (idCounter >= 100 && type === "normal" && Math.random() < 0.15) {
+  if (idCounter >= 25 && type === "normal" && Math.random() < 0.2) {
     // 15% chance for boost on normal platforms
     spawnBoost = true;
   }
 
   return { type, color, spawnBoost };
 }
+
+startGame();
+animate();

@@ -20,29 +20,39 @@ body {
   height: 100dvh;
 }
 
-canvas {
-  background-color: #87ceeb;
-  box-shadow: 0 0 10x rgba(0, 0, 0, 0.2);
-  height: 100%;
+.canvasContainer {
   margin: 10px 0;
+  overflow: hidden;
+  height: 100%;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+  background-color: #87ceeb;
   position: relative;
 }
 
-score {
+canvas {
+  height: 100%;
+  border-radius: 10px;
+  /* background-color: #87ceeb; */
+}
+
+#score {
   position: absolute;
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
 
-  font-size: 128px;
+  z-index: 99;
+  font-size: 144px;
+  color: black;
 }
 
 /* canvas for smaller screen */
 @media (max-width: 600px) {
-  canvas {
+  .canvasContainer {
     margin: 0;
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+
     border-radius: 0;
   }
 }

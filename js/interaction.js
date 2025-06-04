@@ -27,6 +27,10 @@ addEventListener("keydown", ({ key }) => {
     case "w":
       keys.up.isPressed = true;
       break;
+
+    case " ":
+      keys.up.isPressed = true;
+      break;
   }
 });
 
@@ -56,6 +60,10 @@ addEventListener("keyup", ({ key }) => {
       break;
 
     case "w":
+      keys.up.isPressed = false;
+      break;
+
+    case " ":
       keys.up.isPressed = false;
       break;
   }
